@@ -1,8 +1,8 @@
-import PostsDAO from "../dao/postsDAO.js"
+import RestaurantsDAO from "../dao/restaurantsDAO.js"
 
-export default class PostsController {
-  static async apiGetPosts(req, res, next) {
-    const postsPerPage = req.query.postsPerPage ? parseInt(req.query.postsPerPage, 10) : 20
+export default class RestaurantsController {
+  static async apiGetRestaurants(req, res, next) {
+    const restaurantsPerPage = req.query.restaurantsPerPage ? parseInt(req.query.restaurantsPerPage, 10) : 20
     const page = req.query.page ? parseInt(req.query.page, 10) : 0
 
     let filters = {}
@@ -14,40 +14,39 @@ export default class PostsController {
       filters.name = req.query.name
     }
 
-    const { postsList, totalNumPosts } = await PostsDAO.getPosts({
+    const { restaurantsList, totalNumRestaurants } = await RestaurantsDAO.getRestaurants({
       filters,
       page,
-      postsPerPage,
+      restaurantsPerPage,
     })
 
     let response = {
-      posts: postsList,
+      restaurants: restaurantsList,
       page: page,
       filters: filters,
-      entries_per_page: postsPerPage,
-      total_results: totalNumPosts,
+      entries_per_page: restaurantsPerPage,
+      total_results: totalNumRestaurants,
     }
     res.json(response)
   }
-
-  static async apiGetPostById(req, res, next) {
+  static async apiGetRestaurantById(req, res, next) {
     try {
       let id = req.params.id || {}
-      let post = await PostsDAO.getPostByID(id)
-      if (!post) {
+      let restaurant = await RestaurantsDAO.getRestaurantByID(id)
+      if (!restaurant) {
         res.status(404).json({ error: "Not found" })
         return
       }
-      res.json(post)
+      res.json(restaurant)
     } catch (e) {
       console.log(`api, ${e}`)
       res.status(500).json({ error: e })
     }
   }
 
-  static async apiGetPostCuisines(req, res, next) {
+  static async apiGetRestaurantCuisines(req, res, next) {
     try {
-      let cuisines = await PostsDAO.getCuisines()
+      let cuisines = await RestaurantsDAO.getCuisines()
       res.json(cuisines)
     } catch (e) {
       console.log(`api, ${e}`)
