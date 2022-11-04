@@ -1,7 +1,7 @@
 import React from "react";
 
 
-function AddComment() {
+function AddReview() {
 
   return (
     <div className="App">
@@ -10,4 +10,4 @@ function AddComment() {
   )
 }
 
-export default AddComment;
+export default AddReview;
